@@ -35,14 +35,17 @@ function startGame() {
 
             //DRAG FUNCTIONALITY
             tile.addEventListener("dragstart", dragStart); //click on a candy, initialize drag process
-            tile.addEventListener("touchstart", dragStart); //click on a candy, initialize drag process
             tile.addEventListener("dragover", dragOver);  //clicking on candy, moving mouse to drag the candy
-            tile.addEventListener("touchmove", dragOver);  //clicking on candy, moving mouse to drag the candy
             tile.addEventListener("dragenter", dragEnter); //dragging candy onto another candy
             tile.addEventListener("dragleave", dragLeave); //leave candy over another candy
             tile.addEventListener("drop", dragDrop); //dropping a candy over another candy
-            tile.addEventListener("touchend", dragDrop); //dropping a candy over another candy
             tile.addEventListener("dragend", dragEnd); //after drag process completed, we swap candies
+
+            //TOUCH FUNCTIONALITY
+            tile.addEventListener("touchstart", touchStart); //tap on a candy, initialize touch process
+            tile.addEventListener("touchmove", touchMove); //dragging candy on touch screen
+            tile.addEventListener("touchend", touchEnd); //after touch process completed, we swap candies
+
 
             document.getElementById("board").append(tile);
             row.push(tile);
@@ -52,6 +55,7 @@ function startGame() {
 
     console.log(board);
 }
+
 
 function dragStart() {
     //this refers to tile that was clicked on for dragging
@@ -111,6 +115,43 @@ function dragEnd() {
             otherTile.src = currImg;    
         }
     }
+}
+
+function touchStart(e) {
+    e.preventDefault();
+    currTile = this;
+    touchX = e.touches[0].pageX;
+    touchY = e.touches[0].pageY;
+}
+
+function touchMove(e) {
+    e.preventDefault();
+    let xDiff = e.touches[0].pageX - touchX;
+    let yDiff = e.touches[0].pageY - touchY;
+    if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        // horizontal movement
+        if (xDiff > 0) {
+            // move right
+            otherTile = document.getElementById((parseInt(currTile.id.charAt(0))) + "-" + (parseInt(currTile.id.charAt(2)) + 1));
+        } else {
+            // move left
+            otherTile = document.getElementById((parseInt(currTile.id.charAt(0))) + "-" + (parseInt(currTile.id.charAt(2)) - 1));
+        }
+    } else {
+        // vertical movement
+        if (yDiff > 0) {
+            // move down
+            otherTile = document.getElementById((parseInt(currTile.id.charAt(0)) + 1) + "-" + (parseInt(currTile.id.charAt(2))));
+        } else {
+            // move up
+            otherTile = document.getElementById((parseInt(currTile.id.charAt(0)) - 1) + "-" + (parseInt(currTile.id.charAt(2))));
+        }
+    }
+    dragDrop();
+}
+
+function touchEnd() {
+    dragEnd();
 }
 
 function crushCandy() {
