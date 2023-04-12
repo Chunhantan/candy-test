@@ -35,10 +35,13 @@ function startGame() {
 
             //DRAG FUNCTIONALITY
             tile.addEventListener("dragstart", dragStart); //click on a candy, initialize drag process
+            tile.addEventListener("touchstart", dragStart); //click on a candy, initialize drag process
             tile.addEventListener("dragover", dragOver);  //clicking on candy, moving mouse to drag the candy
+            tile.addEventListener("touchmove", dragOver);  //clicking on candy, moving mouse to drag the candy
             tile.addEventListener("dragenter", dragEnter); //dragging candy onto another candy
             tile.addEventListener("dragleave", dragLeave); //leave candy over another candy
             tile.addEventListener("drop", dragDrop); //dropping a candy over another candy
+            tile.addEventListener("touchend", dragDrop); //dropping a candy over another candy
             tile.addEventListener("dragend", dragEnd); //after drag process completed, we swap candies
 
             document.getElementById("board").append(tile);
@@ -241,7 +244,7 @@ function generateCandy() {
 // Set the date we're counting down to
   var countDownDate = new Date().getTime() + 45000;
 
-// Update the countdown every 1 second
+  // Update the countdown every 1 second
 var countdown = setInterval(function() {
 
   // Get the current date and time
